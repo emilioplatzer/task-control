@@ -66,3 +66,9 @@ td{
     -o-transition:     background 2s;
     transition:        background 2s;
 }
+
+#logo{
+    height:120px;
+    float:left;
+    margin:8px;
+}
