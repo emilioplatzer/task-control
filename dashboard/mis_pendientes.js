@@ -132,7 +132,7 @@ var paraMostrarId=function(destino, valor){
     destino.appendChild(check);
 }
 
-var campos={
+var campos_pendientes={
     id:         { titulo:'', tipo:'id', mostrar:paraMostrarId },
     remitente:  { titulo:'Remitente', mostrar:paraMostrarEmail, colspan:2 },
     asunto:     { titulo:'Asunto' },
@@ -141,6 +141,8 @@ var campos={
     respuesta:  { titulo:'', tipo:'respuesta', mostrar:paraMostrarSiNo },
     link:       { titulo:'', tipo:'link' , mostrar:paraMostrarLink},
 }
+
+var campos=campos_pendientes;
 /* Otros campos que no se ven tipo:
     emitido (fecha)
     respondido (fecha)
@@ -181,7 +183,9 @@ function enviar(parametros,alterminar,fondo){
 function refrescar(){
     var boton=document.getElementById('boton_refrescar')||document.body;
     boton.style.backgroundColor='';
-    enviar({accion:'listar_pendientes'},function(respuesta){
+    enviar({accion:'listar_pendientes',
+        destinatario:document.getElementById('nombre_usuario').innerText
+    },function(respuesta){
         mensajes=respuesta.mensajes;
         poblar_tabla();
     },boton);
@@ -243,7 +247,8 @@ function armar_pantalla_inicial(){
     var tabla=document.createElement('table');
     tabla.id='tabla_mensajes';
     div.appendChild(tabla);
-    document.getElementById('nombre_usuario').innerText='+Emilio';
+    document.getElementById('nombre_usuario').innerText='emilioplatzer@gmail.com';
+    document.getElementById('nombre_usuario').onblur=refrescar;
     agregarleBoton(document.getElementById('seleccionados'),'Sí');
     agregarleBoton(document.getElementById('seleccionados'),'No');
     refrescar();

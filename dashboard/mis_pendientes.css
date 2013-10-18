@@ -20,6 +20,10 @@ body{
     color:white;
 }
 
+#nombre_usuario:before{
+    content:' +';
+}
+
 #nombre_usuario{
     font-size:120%; 
     color:white;
