@@ -114,3 +114,12 @@ td{
     min-width:130px;
     text-align:center;
 }
+
+.col_respuesta{
+    text-align:center;
+    white-space: nowrap;
+}
+
+.col_respuesta img{
+    margin:3px;
+}
