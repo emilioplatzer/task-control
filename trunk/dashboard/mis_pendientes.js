@@ -150,9 +150,7 @@ var mensajes=[
     {id:38, remitente:'Pepe',  asunto:'Necesito un toner'                   , vencimiento:'2013-11-5'  , respuesta:'', rapida:'', link:''},
 ]
 
-function refrescar(){
-    var boton=document.getElementById('boton_refrescar');
-    boton.style.backgroundColor='';
+function enviar(peticion,alterminar,fondo){
     var peticion=new XMLHttpRequest();
     peticion.onreadystatechange=function(){
       switch(peticion.readyState) { 
@@ -160,8 +158,7 @@ function refrescar(){
             var respuestaJSON = peticion.responseText;
             try{
                 var respuesta = JSON.parse(respuestaJSON);
-                mensajes=respuesta.mensajes;
-                poblar_tabla();
+                alterminar(respuesta);
             }catch(err){
                 boton.style.backgroundColor='orange';
                 boton.title=err+' '+respuestaJSON;
@@ -171,6 +168,15 @@ function refrescar(){
     peticion.open('POST','servidor.php',true);
     peticion.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
     peticion.send('todo='+JSON.stringify({accion:'listar_pendientes'}));
+}
+
+function refrescar(){
+    var boton=document.getElementById('boton_refrescar');
+    boton.style.backgroundColor='';
+    enviar({accion:'listar_pendientes'},function(respuesta){
+        mensajes=respuesta.mensajes;
+        poblar_tabla();
+    },boton);
 }
 
 function poblar_tabla(){
