@@ -145,12 +145,26 @@ var mensajes=[
 ]
 
 function refrescar(){
-    mensajes=[
-        {id:33, remitente:'Pepe'   ,asunto:'Necesito un toner'                     , vencimiento:'2013-10-19', respuesta:'', rapida:'', link:''},
-        {id:35, remitente:'Juan'   ,asunto:'Confirmar recepción de nota de pedido' , vencimiento:'2013-10-21', respuesta:'', rapida:'', link:''},
-        {id:37, remitente:'Alberto',asunto:'Confirmar el envío del pedido'         , vencimiento:'2014-1-2'  , respuesta:'', rapida:'', link:''},
-    ];
-    poblar_tabla();
+    var boton=document.getElementById('boton_refrescar');
+    boton.style.backgroundColor='';
+    var peticion=new XMLHttpRequest();
+    peticion.onreadystatechange=function(){
+      switch(peticion.readyState) { 
+        case 4:
+            var respuestaJSON = peticion.responseText;
+            try{
+                var respuesta = JSON.parse(respuestaJSON);
+                mensajes=respuesta.mensajes;
+                poblar_tabla();
+            }catch(err){
+                boton.style.backgroundColor='orange';
+                boton.title=err+' '+respuestaJSON;
+            }
+      }
+    }
+    peticion.open('POST','servidor.php',true);
+    peticion.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+    peticion.send('todo='+JSON.stringify({accion:'listar_pendientes'}));
 }
 
 function poblar_tabla(){
