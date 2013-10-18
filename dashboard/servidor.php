@@ -4,7 +4,7 @@ $accion=(@$todo->accion)?:'nada';
 $usuario_actual='emilioplatzer@gmail.com';
 
 function abrirDB(){
-    $db=new PDO('mysql:dbname=taskcontrol;host=localhost', 'root', 'admin');
+    $db=new PDO('mysql:dbname=taskcontrol;host=localhost;charset=utf8', 'root', 'admin');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $db;
 }
@@ -41,7 +41,7 @@ function accion_nada(){
 
 function accion_listar_pendientes(){
     global $usuario_actual;
-    $mensajes=ejecutarSQL(abrirDB(),'SELECT * FROM `mensajes` WHERE `destinatario` = :usuario AND `respuesta` IS NULL',array(':usuario'=>$usuario_actual));
+    $mensajes=ejecutarSQL(abrirDB(),'SELECT * FROM `mensajes` WHERE `destinatario` = :usuario AND `respuesta` IS NULL ORDER BY `vencimiento`',array(':usuario'=>$usuario_actual));
     echo json_encode(array('mensajes'=>$mensajes));
     // http://localhost/tc/dashboard/servidor.php?todo={"accion":"listar_pendientes"}
 }

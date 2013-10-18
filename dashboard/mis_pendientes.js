@@ -97,7 +97,7 @@ var agregarleBoton=function(destino,label,id,color,accion){
                     },3000);
                     fila.botonPresionado=this;
                     for(var i=0; i<fila.cells.length; i++){
-                        fila.cells[i].style.backgroundColor='#575757';
+                        fila.cells[i].style.backgroundColor='#BFBFBF';
                     }
                 }
             }
