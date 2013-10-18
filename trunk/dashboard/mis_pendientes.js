@@ -257,6 +257,8 @@ function poblar_tabla(){
         td.className='titulo';
         if(!textoTitulo){
             td.classList.add('celda_vacia');
+        }else{
+            td.className='titulo_ordenable';
         }
     }
     for(var i=0; i<mensajes.length; i++){

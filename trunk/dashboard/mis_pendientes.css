@@ -2,7 +2,7 @@
 @import url(http://fonts.googleapis.com/css?family=Noto+Sans:400,700); 
 
 body{ 
-    font-size:24px;
+    font-size:22px;
     font-family:Century Gothic, Noto Sans, Arial;
     background-color:#BFBFBF;
 }
@@ -42,11 +42,10 @@ body{
 }
 
 #resultados tr{
-    height:51px;
 }
 
 #resultados td{
-    height:51px;
+    /* height:51px; */
     border:4px solid #BFBFBF;
     padding:3px;
     font-size:110%; 
@@ -72,10 +71,12 @@ body{
     height:24px;
 }
 
-#resultados .titulo{
+#resultados td.titulo{
     color:black;
     font-weight:bold;
     font-size:90%;
+    padding-right:16px;
+    /* height:12px; */
 }
 
 #botonera button{
@@ -92,7 +93,7 @@ td{
 }
 
 #logo{
-    height:120px;
+    height:160px;
     float:left;
     margin:8px;
 }
@@ -137,4 +138,12 @@ td{
 .boton_obscuro{
     border:3px dashed transparent;
     opacity:0.4;
+}
+
+.titulo_ordenable{
+    background:url(cuadro-azul.png);
+    background-repeat:no-repeat;
+    background-position:right;
+    /* background-origin:margin-box; */
+    /* background-size:47px 40px; */
 }
