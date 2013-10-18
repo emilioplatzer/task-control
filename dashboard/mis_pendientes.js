@@ -45,7 +45,7 @@ var paraMostrar=function(destino, valor){
 
 var paraMostrarEmail=function(destino, valor){
     if('innerText' in destino){
-        destino.innerText=(valor||'').replace('@gmail.com','');;
+        destino.innerText=(valor||'').replace('@gmail.com','');
     }
 }
 
@@ -62,10 +62,18 @@ var paraMostrarFecha=function(destino, valor){
 }
 
 var agregarleBoton=function(destino,label,id,color,accion){
-    var boton=document.createElement('button');
-    destino.appendChild(boton);
+    var imagenes={'Sí': 'boton-si.png', 'No':'boton-no.png'};
+    var boton;
+    if(imagenes[label]){
+        boton=document.createElement('img');
+        boton.src=imagenes[label];
+        boton.style.opacity='0.7';
+    }else{
+        boton=document.createElement('button');
+        boton.innerText=label;
+    }
     boton.valor=label;
-    boton.innerText=label;
+    destino.appendChild(boton);
     if(id){
         if(accion=='deshacer'){
             boton.onclick=function(){
@@ -122,6 +130,11 @@ var paraMostrarLink=function(destino, valor){
         var anchor=document.createElement('a');
         var imagen=document.createElement('img');
         imagen.src='gmail.png';
+        if(valor){
+            imagen.onclick=function(){
+                window.open(valor, '_blank');
+            }
+        }
         anchor.appendChild(imagen);
         destino.appendChild(anchor);
     }
