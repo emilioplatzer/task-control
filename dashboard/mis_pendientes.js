@@ -61,15 +61,14 @@ var paraMostrarFecha=function(destino, valor){
         var dias=Math.floor((fecha.getTime()-(new Date()).getTime())/(1000*60*60*24));
         var LIMITEDIAS=7;
         if(dias<=0){
-            destino.style.backgroundColor='red';
+            destino.style.backgroundColor='rgb(255,100,100)';
         }else if(dias<LIMITEDIAS/2){
-            // destino.style.backgroundColor='rgb(255,128,0)';
-            destino.style.backgroundColor='rgb(255,'+Math.floor(dias*510/LIMITEDIAS)+',0)';
+            destino.style.backgroundColor='rgb(255,'+Math.floor(dias*310/LIMITEDIAS+100)+',100)';
         }else{
             if(dias>LIMITEDIAS){
                 dias=LIMITEDIAS;
             }
-            destino.style.backgroundColor='rgb('+Math.floor(510-dias*510/LIMITEDIAS)+',255,0)';
+            destino.style.backgroundColor='rgb('+Math.floor(510-dias*310/LIMITEDIAS)+',255,100)';
         }
         destino.colorVencimiento=destino.style.backgroundColor;
     }
@@ -81,12 +80,12 @@ var agregarleBoton=function(destino,label,id,color,accion){
     if(imagenes[label]){
         boton=document.createElement('img');
         boton.src=imagenes[label];
-        boton.style.opacity='0.7';
     }else{
         boton=document.createElement('button');
         boton.innerText=label;
     }
     boton.valor=label;
+    boton.className='boton_apretable';
     destino.appendChild(boton);
     if(id){
         if(accion=='deshacer'){
@@ -96,7 +95,8 @@ var agregarleBoton=function(destino,label,id,color,accion){
                 fila.porEnviar=null;
                 var celda_vencimiento=document.getElementById('col_vencimiento_'+id);
                 celda_vencimiento.innerHTML=celda_vencimiento.ocultoHTML;
-                fila.botonPresionado.style.backgroundColor='';
+                fila.boton1.className='boton_apretable';
+                fila.boton2.className='boton_apretable';
                 for(var i=0; i<fila.cells.length; i++){
                     fila.cells[i].style.backgroundColor=fila.cells[i].colorVencimiento||'white';
                 }
@@ -106,7 +106,9 @@ var agregarleBoton=function(destino,label,id,color,accion){
                 var fila=document.getElementById('fila_'+id);
                 if(!fila.porEnviar){
                     //this.style.backgroundColor=color;
-                    this.style.opacity='';
+                    fila.boton1.className='boton_obscuro';
+                    fila.boton2.className='boton_obscuro';
+                    this.className='boton_apretado';
                     var tabla=document.getElementById('tabla_mensajes');
                     var celda_vencimiento=document.getElementById('col_vencimiento_'+id);
                     celda_vencimiento.ocultoHTML=celda_vencimiento.innerHTML;
@@ -135,8 +137,8 @@ var agregarleBoton=function(destino,label,id,color,accion){
 
 var paraMostrarSiNo=function(destino, valor,id){
     if('innerText' in destino){
-        agregarleBoton(destino,'Sí',id,'green');
-        agregarleBoton(destino,'No',id,'red');
+        destino.parentNode.boton1=agregarleBoton(destino,'Sí',id,'green');
+        destino.parentNode.boton2=agregarleBoton(destino,'No',id,'red');
     }
 }
 
