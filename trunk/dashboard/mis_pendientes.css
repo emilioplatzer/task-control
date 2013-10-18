@@ -4,7 +4,15 @@
 body{ 
     font-size:24px;
     font-family:Century Gothic, /* Noto Sans, */Arial;
-    background-color:#575757;
+    background-color:#BFBFBF;
+}
+
+#encabezado{
+    width:100%;
+}
+
+#encabezado table{
+    width:100%;
 }
 
 #frase_titulo{
@@ -14,7 +22,6 @@ body{
 
 #nombre_usuario{
     font-size:120%; 
-    float:right;
     color:white;
 }
 
@@ -35,7 +42,7 @@ body{
 
 #resultados td{
     height:51px;
-    border:4px solid #575757;
+    border:4px solid #BFBFBF;
     padding:3px;
     font-size:110%; 
     color:#575757;
