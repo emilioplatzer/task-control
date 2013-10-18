@@ -1,22 +1,48 @@
 ﻿<?php
-$todo=json_decode(@$_REQUEST['todo']?:'{}');
+$todo=json_decode(@$_POST['todo']?:'{}');
 $accion=(@$todo->accion)?:'nada';
 $usuario_actual='emilioplatzer@gmail.com';
 
-function abrirDB(){
-    $db=new PDO('mysql:dbname=taskcontrol;host=localhost;charset=utf8', 'root', 'admin');
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    return $db;
-}
+if(getenv('COMPUTERNAME')=='EVAIO'){
 
-function ejecutarSQL($db,$sql,$parametros){
-    $sentencia=$db->prepare($sql);
-    $sentencia->execute($parametros);
-    if(substr($sql,0,6)=='SELECT'){
-        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    function abrirDB(){
+        $db=new PDO('mysql:dbname=taskcontrol;host=localhost;charset=utf8', 'root', 'admin');
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $db;
     }
-}
 
+    function ejecutarSQL($db,$sql,$parametros){
+        $sentencia=$db->prepare($sql);
+        $sentencia->execute($parametros);
+        if(substr($sql,0,6)=='SELECT'){
+            return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        }
+    }
+
+}else{
+
+    require('clases/MySQL.php');
+
+    function abrirDB(){
+        $db= MySQL::getInstance();
+        return $db;
+    }
+
+    function ejecutarSQL($db,$sql,$parametros){
+        foreach($parametros as $key => $value){
+            $sql_text = str_replace($key,"'".$value."'",$sql);
+        }
+        echo $sql_text;
+        $db->setQuery($sql_text);
+        $db->execute();
+        if(substr($sql,0,6)=='SELECT'){
+            $resultados = $db->loadObjectList();
+            return $resultados;
+        }
+    }
+
+}
+    
 /////////////////////////////////////////////////////////////////////////////
 
 $funcion='accion_'.$accion;

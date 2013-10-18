@@ -134,9 +134,9 @@ var paraMostrarId=function(destino, valor){
 
 var campos={
     id:         { titulo:'', tipo:'id', mostrar:paraMostrarId },
-    remitente:  { titulo:'Remitente', mostrar:paraMostrarEmail },
+    remitente:  { titulo:'Remitente', mostrar:paraMostrarEmail, colspan:2 },
     asunto:     { titulo:'Asunto' },
-    vencimiento:{ titulo:'Vencimiento', tipo:'fecha', mostrar:paraMostrarFecha },
+    vencimiento:{ titulo:'Límite', tipo:'fecha', mostrar:paraMostrarFecha },
     rapida:     { titulo:'Respuesta Rápida'},
     respuesta:  { titulo:'', tipo:'respuesta', mostrar:paraMostrarSiNo },
     link:       { titulo:'', tipo:'link' , mostrar:paraMostrarLink},
@@ -179,7 +179,7 @@ function enviar(parametros,alterminar,fondo){
 }
 
 function refrescar(){
-    var boton=document.getElementById('boton_refrescar');
+    var boton=document.getElementById('boton_refrescar')||document.body;
     boton.style.backgroundColor='';
     enviar({accion:'listar_pendientes'},function(respuesta){
         mensajes=respuesta.mensajes;
@@ -191,11 +191,35 @@ function poblar_tabla(){
     var tabla=document.getElementById('tabla_mensajes');
     tabla.innerHTML='';
     var titulos=tabla.insertRow(-1);
+    var td=titulos.insertCell(-1);
+    td.className='botones_superiores';
+    var img=document.createElement('img');
+    img.src='cuadro-punteado.png';
+    img.onclick=seleccionarTodo;
+    td.appendChild(img);
+    td=titulos.insertCell(-1);
+    td.id='boton_refrescar';
+    td.className='botones_superiores';
+    img=document.createElement('img');
+    img.src='loading.png';
+    img.onclick=refrescar;
+    td.appendChild(img);
+    td=titulos.insertCell(-1);
+    td.className='celda_vacia';
+    td.colSpan=99;
+    var titulos=tabla.insertRow(-1);
     for(var nombre_campo in campos){
         var def_campo=campos[nombre_campo];
         var td=titulos.insertCell(-1);
-        td.innerText='titulo' in def_campo?def_campo.titulo:nombre_campo;
+        var textoTitulo='titulo' in def_campo?def_campo.titulo:nombre_campo;
+        td.innerText=textoTitulo;
+        if(def_campo.colspan){
+            td.colSpan=def_campo.colspan;
+        }
         td.className='titulo';
+        if(!textoTitulo){
+            td.classList.add('celda_vacia');
+        }
     }
     for(var i=0; i<mensajes.length; i++){
         var fila=tabla.insertRow(-1);
@@ -206,6 +230,9 @@ function poblar_tabla(){
             var td=fila.insertCell(-1);
             td.className='col_'+nombre_campo;
             td.id='col_'+nombre_campo+'_'+id;
+            if(def_campo.colspan){
+                td.colSpan=def_campo.colspan;
+            }
             (def_campo.mostrar||paraMostrar)(td,mensajes[i][nombre_campo],id);
         }
     }
@@ -216,8 +243,6 @@ function armar_pantalla_inicial(){
     var tabla=document.createElement('table');
     tabla.id='tabla_mensajes';
     div.appendChild(tabla);
-    document.getElementById('boton_refrescar').onclick=refrescar;
-    document.getElementById('boton_seleccionar_todo').onclick=seleccionarTodo;
     document.getElementById('nombre_usuario').innerText='+Emilio';
     agregarleBoton(document.getElementById('seleccionados'),'Sí');
     agregarleBoton(document.getElementById('seleccionados'),'No');
