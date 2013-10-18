@@ -1,5 +1,4 @@
 <?php
-
 $todo=json_decode(@$_REQUEST['todo']?:'{}');
 $accion=(@$todo->accion)?:'nada';
 $usuario_actual='emilioplatzer@gmail.com';
