@@ -109,3 +109,8 @@ td{
 .celda_vacia{
     background-color:#BFBFBF;
 }
+
+.col_vencimiento{
+    min-width:130px;
+    text-align:center;
+}
