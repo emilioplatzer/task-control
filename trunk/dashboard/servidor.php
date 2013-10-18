@@ -66,15 +66,21 @@ function accion_nada(){
 }
 
 function accion_listar_pendientes(){
-    global $usuario_actual;
-    $mensajes=ejecutarSQL(abrirDB(),'SELECT * FROM `mensajes` WHERE `destinatario` = :usuario AND `respuesta` IS NULL ORDER BY `vencimiento`',array(':usuario'=>$usuario_actual));
+    global $todo;
+    $mensajes=ejecutarSQL(abrirDB(),
+        'SELECT * FROM `mensajes` WHERE `destinatario` = :destinatario AND `respuesta` IS NULL ORDER BY `vencimiento`'
+    ,array(
+        ':destinatario'=>$todo->destinatario
+    ));
     echo json_encode(array('mensajes'=>$mensajes));
     // http://localhost/tc/dashboard/servidor.php?todo={"accion":"listar_pendientes"}
 }
 
 function accion_enviar_respuesta(){
     global $todo;
-    ejecutarSQL(abrirDB(),'UPDATE `mensajes` SET `respuesta` = :respuesta, `rapida` = :rapida WHERE id = :id',array(
+    ejecutarSQL(abrirDB(),
+        'UPDATE `mensajes` SET `respuesta` = :respuesta, `rapida` = :rapida WHERE id = :id'
+    ,array(
         ':respuesta'=>$todo->respuesta,
         ':rapida'   =>$todo->rapida   ,
         ':id'       =>$todo->id
