@@ -91,7 +91,11 @@ var agregarleBoton=function(destino,label,id,color,accion){
                     var boton_deshacer=agregarleBoton(celda_vencimiento,'deshacer',id,'cyan','deshacer');
                     boton_deshacer.style.backgroundColor='yellow';
                     fila.porEnviar=setTimeout(function(){
-                        enviar({accion:'enviar_respuesta', id:id, respuesta:label, rapida:null},function(respuesta){
+                        enviar({accion:'enviar_respuesta', 
+                            id:id, 
+                            respuesta:label, 
+                            rapida:document.getElementById('col_rapida_'+id).innerText||null
+                        },function(respuesta){
                             tabla.deleteRow(fila.rowIndex); 
                         });
                     },3000);
@@ -137,7 +141,7 @@ var campos_pendientes={
     remitente:  { titulo:'Remitente', mostrar:paraMostrarEmail, colspan:2 },
     asunto:     { titulo:'Asunto' },
     vencimiento:{ titulo:'Límite', tipo:'fecha', mostrar:paraMostrarFecha },
-    rapida:     { titulo:'Respuesta Rápida'},
+    rapida:     { titulo:'Respuesta Rápida', contentEditable:true},
     respuesta:  { titulo:'', tipo:'respuesta', mostrar:paraMostrarSiNo },
     link:       { titulo:'', tipo:'link' , mostrar:paraMostrarLink},
 }
@@ -236,6 +240,9 @@ function poblar_tabla(){
             td.id='col_'+nombre_campo+'_'+id;
             if(def_campo.colspan){
                 td.colSpan=def_campo.colspan;
+            }
+            if(def_campo.contentEditable){
+                td.contentEditable=true;
             }
             (def_campo.mostrar||paraMostrar)(td,mensajes[i][nombre_campo],id);
         }
