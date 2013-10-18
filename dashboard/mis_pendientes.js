@@ -64,6 +64,7 @@ var paraMostrarFecha=function(destino, valor){
 var agregarleBoton=function(destino,label,id,color,accion){
     var boton=document.createElement('button');
     destino.appendChild(boton);
+    boton.valor=label;
     boton.innerText=label;
     if(id){
         if(accion=='deshacer'){
@@ -89,7 +90,11 @@ var agregarleBoton=function(destino,label,id,color,accion){
                     celda_vencimiento.innerHTML='';
                     var boton_deshacer=agregarleBoton(celda_vencimiento,'deshacer',id,'cyan','deshacer');
                     boton_deshacer.style.backgroundColor='yellow';
-                    fila.porEnviar=setTimeout(function(){tabla.deleteRow(fila.rowIndex)},3000);
+                    fila.porEnviar=setTimeout(function(){
+                        enviar({accion:'enviar_respuesta', id:id, respuesta:label, rapida:null},function(respuesta){
+                            tabla.deleteRow(fila.rowIndex); 
+                        });
+                    },3000);
                     fila.botonPresionado=this;
                     for(var i=0; i<fila.cells.length; i++){
                         fila.cells[i].style.backgroundColor='#575757';
@@ -150,7 +155,10 @@ var mensajes=[
     {id:38, remitente:'Pepe',  asunto:'Necesito un toner'                   , vencimiento:'2013-11-5'  , respuesta:'', rapida:'', link:''},
 ]
 
-function enviar(peticion,alterminar,fondo){
+function enviar(parametros,alterminar,fondo){
+    if(!fondo){
+        fondo=document.getElementById('logo');
+    }
     var peticion=new XMLHttpRequest();
     peticion.onreadystatechange=function(){
       switch(peticion.readyState) { 
@@ -160,14 +168,14 @@ function enviar(peticion,alterminar,fondo){
                 var respuesta = JSON.parse(respuestaJSON);
                 alterminar(respuesta);
             }catch(err){
-                boton.style.backgroundColor='orange';
-                boton.title=err+' '+respuestaJSON;
+                fondo.style.backgroundColor='orange';
+                fondo.title=err+' '+respuestaJSON;
             }
       }
     }
     peticion.open('POST','servidor.php',true);
     peticion.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-    peticion.send('todo='+JSON.stringify({accion:'listar_pendientes'}));
+    peticion.send('todo='+JSON.stringify(parametros));
 }
 
 function refrescar(){
@@ -213,7 +221,8 @@ function armar_pantalla_inicial(){
     document.getElementById('nombre_usuario').innerText='+Emilio';
     agregarleBoton(document.getElementById('seleccionados'),'Sí');
     agregarleBoton(document.getElementById('seleccionados'),'No');
-    poblar_tabla();
+    refrescar();
+    // poblar_tabla();
 }
 
 window.addEventListener('load', armar_pantalla_inicial);
