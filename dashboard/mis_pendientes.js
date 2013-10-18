@@ -43,6 +43,12 @@ var paraMostrar=function(destino, valor){
     }
 }
 
+var paraMostrarEmail=function(destino, valor){
+    if('innerText' in destino){
+        destino.innerText=(valor||'').replace('@gmail.com','');;
+    }
+}
+
 var paraMostrarFecha=function(destino, valor){
     if('innerText' in destino){
         var fecha=new Date(valor);
@@ -123,7 +129,7 @@ var paraMostrarId=function(destino, valor){
 
 var campos={
     id:         { titulo:'', tipo:'id', mostrar:paraMostrarId },
-    remitente:  { titulo:'Remitente' },
+    remitente:  { titulo:'Remitente', mostrar:paraMostrarEmail },
     asunto:     { titulo:'Asunto' },
     vencimiento:{ titulo:'Vencimiento', tipo:'fecha', mostrar:paraMostrarFecha },
     rapida:     { titulo:'Respuesta Rápida'},
