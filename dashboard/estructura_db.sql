@@ -17,3 +17,5 @@ insert into mensajes(remitente, destinatario, emitido, asunto, vencimiento) valu
 insert into mensajes(remitente, destinatario, emitido, asunto, vencimiento) values
    ('ricardoceci@gmail.com', 'emilioplatzer@gmail.com', '2013-11-10', 'Éxito en la etapa de testing del BackEnd', '2013-11-15'),
    ('ricardoceci@gmail.com', 'emilioplatzer@gmail.com', '2013-11-10', 'Éxito en la etapa de testing del FrontEnd', '2013-11-15');
+insert into mensajes(remitente, destinatario, emitido, asunto, vencimiento) values
+   ('pedro.paramo@gmail.com', 'emilioplatzer@gmail.com', '2013-11-10', 'Reunión semestral (confirmar asistencia)', '2013-11-15');

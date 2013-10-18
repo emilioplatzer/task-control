@@ -58,6 +58,20 @@ var paraMostrarFecha=function(destino, valor){
         }else{
             destino.innerHTML=sin_annio+'<small>/'+fecha.getUTCFullYear()+'</small>';
         }
+        var dias=Math.floor((fecha.getTime()-(new Date()).getTime())/(1000*60*60*24));
+        var LIMITEDIAS=7;
+        if(dias<=0){
+            destino.style.backgroundColor='red';
+        }else if(dias<LIMITEDIAS/2){
+            // destino.style.backgroundColor='rgb(255,128,0)';
+            destino.style.backgroundColor='rgb(255,'+Math.floor(dias*510/LIMITEDIAS)+',0)';
+        }else{
+            if(dias>LIMITEDIAS){
+                dias=LIMITEDIAS;
+            }
+            destino.style.backgroundColor='rgb('+Math.floor(510-dias*510/LIMITEDIAS)+',255,0)';
+        }
+        destino.colorVencimiento=destino.style.backgroundColor;
     }
 }
 
@@ -84,20 +98,21 @@ var agregarleBoton=function(destino,label,id,color,accion){
                 celda_vencimiento.innerHTML=celda_vencimiento.ocultoHTML;
                 fila.botonPresionado.style.backgroundColor='';
                 for(var i=0; i<fila.cells.length; i++){
-                    fila.cells[i].style.backgroundColor='white';
+                    fila.cells[i].style.backgroundColor=fila.cells[i].colorVencimiento||'white';
                 }
             }
         }else{
             boton.onclick=function(){
                 var fila=document.getElementById('fila_'+id);
                 if(!fila.porEnviar){
-                    this.style.backgroundColor=color;
+                    //this.style.backgroundColor=color;
+                    this.style.opacity='';
                     var tabla=document.getElementById('tabla_mensajes');
                     var celda_vencimiento=document.getElementById('col_vencimiento_'+id);
                     celda_vencimiento.ocultoHTML=celda_vencimiento.innerHTML;
                     celda_vencimiento.innerHTML='';
                     var boton_deshacer=agregarleBoton(celda_vencimiento,'deshacer',id,'cyan','deshacer');
-                    boton_deshacer.style.backgroundColor='yellow';
+                    boton_deshacer.style.backgroundColor='cyan';
                     fila.porEnviar=setTimeout(function(){
                         enviar({accion:'enviar_respuesta', 
                             id:id, 
