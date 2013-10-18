@@ -18,15 +18,17 @@ var idCheck=function(evento){
 var seleccionarTodo=function(evento){
     var todosEncendidos=true;
     for(var i=0; i<mensajes.length; i++){
-        if(!document.getElementById('check_'+mensajes[i].id).checked){
+        if(document.getElementById('check_'+mensajes[i].id) && !document.getElementById('check_'+mensajes[i].id).checked){
             todosEncendidos=false;
         }
     }
     var cuantos=0;
     for(var i=0; i<mensajes.length; i++){
-        document.getElementById('check_'+mensajes[i].id).checked=!todosEncendidos;
-        document.getElementById('check_'+mensajes[i].id).src=!todosEncendidos?'cuadro-punteado-check.png':'cuadro-punteado.png';
-        cuantos++;
+        if(document.getElementById('check_'+mensajes[i].id)){
+            document.getElementById('check_'+mensajes[i].id).checked=!todosEncendidos;
+            document.getElementById('check_'+mensajes[i].id).src=!todosEncendidos?'cuadro-punteado-check.png':'cuadro-punteado.png';
+            cuantos++;
+        }
     }
     if(todosEncendidos){
         cuantos=0;
@@ -53,26 +55,50 @@ var paraMostrarFecha=function(destino, valor){
     }
 }
 
-var agregarleBoton=function(destino,label,id){
+var agregarleBoton=function(destino,label,id,color,accion){
     var boton=document.createElement('button');
     destino.appendChild(boton);
     boton.innerText=label;
     if(id){
-        boton.onclick=function(){
-            var fila=document.getElementById('fila_'+id);
-            var tabla=document.getElementById('tabla_mensajes');
-            setTimeout(function(){tabla.deleteRow(fila.rowIndex)},3000);
-            for(var i=0; i<fila.cells.length; i++){
-                fila.cells[i].style.backgroundColor='#575757';
+        if(accion=='deshacer'){
+            boton.onclick=function(){
+                var fila=document.getElementById('fila_'+id);
+                clearTimeout(fila.porEnviar);
+                fila.porEnviar=null;
+                var celda_vencimiento=document.getElementById('col_vencimiento_'+id);
+                celda_vencimiento.innerHTML=celda_vencimiento.ocultoHTML;
+                fila.botonPresionado.style.backgroundColor='';
+                for(var i=0; i<fila.cells.length; i++){
+                    fila.cells[i].style.backgroundColor='white';
+                }
+            }
+        }else{
+            boton.onclick=function(){
+                var fila=document.getElementById('fila_'+id);
+                if(!fila.porEnviar){
+                    this.style.backgroundColor=color;
+                    var tabla=document.getElementById('tabla_mensajes');
+                    var celda_vencimiento=document.getElementById('col_vencimiento_'+id);
+                    celda_vencimiento.ocultoHTML=celda_vencimiento.innerHTML;
+                    celda_vencimiento.innerHTML='';
+                    var boton_deshacer=agregarleBoton(celda_vencimiento,'deshacer',id,'cyan','deshacer');
+                    boton_deshacer.style.backgroundColor='yellow';
+                    fila.porEnviar=setTimeout(function(){tabla.deleteRow(fila.rowIndex)},3000);
+                    fila.botonPresionado=this;
+                    for(var i=0; i<fila.cells.length; i++){
+                        fila.cells[i].style.backgroundColor='#575757';
+                    }
+                }
             }
         }
     }
+    return boton;
 }
 
 var paraMostrarSiNo=function(destino, valor,id){
     if('innerText' in destino){
-        agregarleBoton(destino,'Sí',id);
-        agregarleBoton(destino,'No',id);
+        agregarleBoton(destino,'Sí',id,'green');
+        agregarleBoton(destino,'No',id,'red');
     }
 }
 
@@ -145,6 +171,7 @@ function poblar_tabla(){
             var def_campo=campos[nombre_campo];
             var td=fila.insertCell(-1);
             td.className='col_'+nombre_campo;
+            td.id='col_'+nombre_campo+'_'+id;
             (def_campo.mostrar||paraMostrar)(td,mensajes[i][nombre_campo],id);
         }
     }
