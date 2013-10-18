@@ -61,14 +61,18 @@ body{
 }
 
 td{
-    -moz-transition:   background 2s;
-    -webkit-transition:background 2s;
-    -o-transition:     background 2s;
-    transition:        background 2s;
+    -moz-transition:   background 3s;
+    -webkit-transition:background 3s;
+    -o-transition:     background 3s;
+    transition:        background 3s;
 }
 
 #logo{
     height:120px;
     float:left;
     margin:8px;
+}
+
+#seleccionados button{
+    font-size:100%;
 }
