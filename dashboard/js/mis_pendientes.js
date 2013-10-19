@@ -321,30 +321,9 @@ function armar_pantalla_inicial(){
     document.getElementById('nombre_usuario').onblur=refrescar;
     agregarleBoton(document.getElementById('seleccionados'),'Sí');
     agregarleBoton(document.getElementById('seleccionados'),'No');
-    document.getElementById('boton_login').onclick=loguearse;
     enviar({accion:'identificar'},function(respuesta){
         document.getElementById('nombre_usuario').innerText=respuesta.user;
         refrescar();
-    });
-        document.getElementById('user').value='tute.dc.uba.ar@gmail.com';
-        document.getElementById('pass').value='contra22tdua';
-}
-
-function loguearse(){
-    enviar({url:'https://www.google.com/accounts/ClientLogin', 
-        accountType:'HOSTED_OR_GOOGLE', 
-        Email:document.getElementById('user').value,
-        Passwd:document.getElementById('pass').value,
-        service:'cl',
-        source:'GrupoApplePie-TaskControl-V1.00'
-    },function(respuesta){
-        alert('obtuve: '+respuesta);
-        usuario=respuesta.usuario;
-        token=respuesta.token;
-        enviar({accion:'identificar', soy:usuario, token:token},function(respuesta){
-            document.getElementById('nombre_usuario').innerText=usuario;
-            refrescar();
-        });
     });
 }
 
