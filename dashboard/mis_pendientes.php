@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-<link rel="stylesheet" href="mis_pendientes.css" type="text/css">
+<link rel="stylesheet" href="css/mis_pendientes.css" type="text/css">
 </head>
 <table id=encabezado><tr><td>
     <img id=logo src=logo-hi-res.png>
@@ -12,5 +12,5 @@
 </table>
 <div id=resultados></div>
 <div id=seleccionados>Se seleccionaron <span id=cuantos_seleccionados></span> mensajes. Respuestas grupales: </div>
-<script src=mis_pendientes.js></script>
+<script src="js/mis_pendientes.js"></script>
 </html>

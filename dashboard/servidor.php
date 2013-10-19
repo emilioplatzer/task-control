@@ -87,4 +87,9 @@ function accion_enviar_respuesta(){
     ));
     echo '{}';
 }
+
+function accion_identificar(){
+    global $todo;
+    echo json_encode(array('user'=>'emilioplatzer@gmail.com'));
+}
 ?>

@@ -166,6 +166,16 @@ var paraMostrarId=function(destino, valor){
     destino.appendChild(check);
 }
 
+var campos_esperados={
+    id:          { titulo:'', tipo:'id', mostrar:paraMostrarId },
+    destinatario:{ titulo:'Destinatario', mostrar:paraMostrarEmail, colspan:2 },
+    asunto:      { titulo:'Asunto' },
+    vencimiento: { titulo:'Límite', tipo:'fecha', mostrar:paraMostrarFecha },
+    rapida:      { titulo:'Respuesta' },
+    respuesta:   { titulo:'', mostrar:paraMostrarSiNo },
+    link:        { titulo:'', tipo:'link' , mostrar:paraMostrarLink},
+}
+
 var campos_pendientes={
     id:         { titulo:'', tipo:'id', mostrar:paraMostrarId },
     remitente:  { titulo:'Remitente', mostrar:paraMostrarEmail, colspan:2 },
@@ -286,12 +296,14 @@ function armar_pantalla_inicial(){
     var tabla=document.createElement('table');
     tabla.id='tabla_mensajes';
     div.appendChild(tabla);
-    document.getElementById('nombre_usuario').innerText='emilioplatzer@gmail.com';
+    document.getElementById('nombre_usuario').innerText='... identificando ...';
     document.getElementById('nombre_usuario').onblur=refrescar;
     agregarleBoton(document.getElementById('seleccionados'),'Sí');
     agregarleBoton(document.getElementById('seleccionados'),'No');
-    refrescar();
-    // poblar_tabla();
+    enviar({accion:'identificar'},function(respuesta){
+        document.getElementById('nombre_usuario').innerText=respuesta.user;
+        refrescar();
+    });
 }
 
 window.addEventListener('load', armar_pantalla_inicial);
