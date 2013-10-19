@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+    <ModulePrefs title="Task Control Developer Bus"
+                 description=""
+                 height="200"
+                 author=""
+                 author_email=""
+                 author_location="">
+ 
+        <!-- Declare feature dependencies.
+The first one is not specific to Gmail contextual gadgets. -->
+        <Require feature="dynamic-height"/>
+ 
+        <!-- The next feature, google.contentmatch, is required for all
+Gmail contextual gadgets.
+<Param> - specify one or more comma-separated extractor IDs in
+a param named "extractors". This line is overridden by the extractor ID
+in the manifest, but is still expected to be present. -->
+        <Require feature="google.contentmatch">
+            <Param name="extractors">
+                google.com:MessageIDExtractor,google.com:SenderEmailExtractor,google.com:RecipientEmailExtractor
+            </Param>
+        </Require>
+    </ModulePrefs>
+ 
+    <!-- Define the content type and display location. The settings
+"html" and "card" are required for all Gmail contextual gadgets. -->
+    <Content type="html" view="card">
+   <![CDATA[
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript">
+</script>
+    <div id="resultados"></div>
+<script type="text/javascript" defer>
+      matches = google.contentmatch.getContentMatches();
+      $.each(matches,function(index,data){
+        if(data.recipient_email){
+                $('#resultados').append('<div id="campo_'+index+'"><input type="checkbox"/>'+data.recipient_email+'<input type="date" id="fecha_'+index+'"/><input type="hidden" id="destinatario_'+index+'" value="'+data.recipient_email+'"/><input type="button" value="solicitar respuesta" onclick="solicitarRespuesta('+index+')"/><br/></div>');
+            }
+        else if(data.subject){
+                $('#resultados').append('<input type="hidden" id="asunto" value="'+data.subject+'"/>');
+            }
+        else if(data.sender_email){
+                    $('#resultados').append('<input type="hidden" id="remitente" value="'+data.sender_email+'"/>');
+            }
+        else if(data.message_id){
+                    $('#resultados').append('<input type="hidden" id="message_id" value="'+data.message_id+'"/>');
+            }
+        });
+       function solicitarRespuesta(i){
+            var usr = $('#destinatario_'+i).val();
+            console.log(usr);
+            var asunto = $('#asunto').val();
+            console.log(asunto);
+            var vto = $('#fecha_'+i).val();
+            console.log(vto);
+            var rte = $('#remitente').val();
+            console.log(rte);
+            var link = $('#message_id').val();
+            console.log(link);
+            params = {};
+            var params = {};
+            var url = 'http://taskcontroldevbus.appspot.com/webservice.php';
+            postdata = {op:'inserTask',usr:usr,asunto:asunto,vto:vto,rte:rte,link:link};
+            params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.POST;
+            params[gadgets.io.RequestParameters.POST_DATA] = gadgets.io.encodeValues(postdata);
+            gadgets.io.makeRequest(url,success,params);
+            }
+            function success(data){
+                console.log(data);
+            }
+           
+ </script>
+        
+    ]]>
+  </Content>
+		
+</Module>
