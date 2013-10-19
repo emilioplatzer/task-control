@@ -9,11 +9,15 @@ var idCheck=function(evento){
     this.checked=!this.checked;
     this.src=this.checked?'cuadro-punteado-check.png':'cuadro-punteado.png';
     var cuantos=0;
+    var todosEncendidos=true;
     for(var i=0; i<mensajes.length; i++){
         if(document.getElementById('check_'+mensajes[i].id).checked){
             cuantos++;
+        }else{
+            todosEncendidos=false;
         }
     }
+    document.getElementById('boton_marcar_todo').src=todosEncendidos?'cuadro-punteado-check.png':'cuadro-punteado.png';
     seleccionados.style.visibility=cuantos>1?'visible':'hidden';
     document.getElementById('cuantos_seleccionados').innerText=cuantos;
 }
@@ -25,6 +29,7 @@ var seleccionarTodo=function(evento){
             todosEncendidos=false;
         }
     }
+    document.getElementById('boton_marcar_todo').src=!todosEncendidos?'cuadro-punteado-check.png':'cuadro-punteado.png';
     var cuantos=0;
     for(var i=0; i<mensajes.length; i++){
         if(document.getElementById('check_'+mensajes[i].id)){
@@ -265,6 +270,7 @@ function poblar_tabla(){
     td.className='botones_superiores';
     var img=document.createElement('img');
     img.src='cuadro-punteado.png';
+    img.id='boton_marcar_todo';
     img.onclick=seleccionarTodo;
     td.appendChild(img);
     td=titulos.insertCell(-1);
