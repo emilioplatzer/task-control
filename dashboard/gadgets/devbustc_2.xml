@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<Module>
+    <ModulePrefs title="Your Gadget"
+                 description=""
+                 height="20"
+                 author=""
+                 author_email=""
+                 author_location="">
+ 
+        <!-- Declare feature dependencies.
+The first one is not specific to Gmail contextual gadgets. -->
+        <Require feature="dynamic-height"/>
+ 
+        <!-- The next feature, google.contentmatch, is required for all
+Gmail contextual gadgets.
+<Param> - specify one or more comma-separated extractor IDs in
+a param named "extractors". This line is overridden by the extractor ID
+in the manifest, but is still expected to be present. -->
+        <Require feature="google.contentmatch">
+            <Param name="extractors">
+                google.com:MessageIDExtractor,google.com:SenderEmailExtractor,google.com:RecipientEmailExtractor
+            </Param>
+        </Require>
+    </ModulePrefs>
+ 
+    <!-- Define the content type and display location. The settings
+"html" and "card" are required for all Gmail contextual gadgets. -->
+    <Content type="html" view="card">
+   <![CDATA[
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript">
+</script>
+      
+ 
+        //Here you can build your application using javascript and html.
+    ]]>
+  </Content>
+		
+</Module>
