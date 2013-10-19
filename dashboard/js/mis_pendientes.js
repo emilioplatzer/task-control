@@ -149,7 +149,7 @@ var paraMostrarLink=function(destino, valor){
         imagen.src='gmail.png';
         if(valor){
             imagen.onclick=function(){
-                window.open(valor, '_blank');
+                window.open('https://mail.google.com/mail/u/0/?shva=1#inbox/'+valor, '_blank');
             }
         }
         anchor.appendChild(imagen);
@@ -300,9 +300,25 @@ function armar_pantalla_inicial(){
     document.getElementById('nombre_usuario').onblur=refrescar;
     agregarleBoton(document.getElementById('seleccionados'),'Sí');
     agregarleBoton(document.getElementById('seleccionados'),'No');
+    agregarleBoton(document.getElementById('boton_login'),loguearse);
     enviar({accion:'identificar'},function(respuesta){
         document.getElementById('nombre_usuario').innerText=respuesta.user;
         refrescar();
+    });
+}
+
+function loguearse(){
+    enviar({url:'https://www.google.com/accounts/ClientLogin', 
+        accountType:'HOSTED_OR_GOOGLE', 
+        Email:document.getElementById('user').innerText,
+        Passwd:document.getElementById('pass').innerText,
+        service:'cl',
+        source:'GrupoApplePie-TaskControl-1000'
+    },function(){
+        enviar({accion:'identificar', soy:usuario, token:token},function(respuesta){
+            document.getElementById('nombre_usuario').innerText=usuario;
+            refrescar();
+        });
     });
 }
 
