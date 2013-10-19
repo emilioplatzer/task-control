@@ -6,8 +6,6 @@
 <table id=encabezado><tr><td>
     <img id=logo src=logo-hi-res.png>
 <td style="text-align:right; vertical-align:bottom"><table>
-    <tr><td style=text-align:right><input id=user><input id=pass type=password><input id=boton_login value='Sing In' type=button>
-    <tr><td style=height:40px>
     <tr><td style=text-align:right><img src=google-bar.png>
     <tr><td id=frase_titulo style=text-align:right>Tareas pendientes por responder <span id=nombre_usuario contenteditable>ingresar G+</span>
     </table>
