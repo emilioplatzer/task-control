@@ -181,7 +181,6 @@ var campos_esperados={
     vencimiento: { titulo:'Límite', tipo:'fecha', mostrar:paraMostrarFecha },
     rapida:      { titulo:'Respuesta' },
     respuesta:   { titulo:'', mostrar:paraMostrarSiNo },
-    link:        { titulo:'', tipo:'link' , mostrar:paraMostrarLink},
 }
 
 var campos_pendientes={
@@ -191,7 +190,6 @@ var campos_pendientes={
     vencimiento:{ titulo:'Límite', tipo:'fecha', mostrar:paraMostrarFecha },
     rapida:     { titulo:'Respuesta Rápida', contentEditable:true},
     respuesta:  { titulo:'', tipo:'respuesta', mostrar:paraMostrarSiNo },
-    link:       { titulo:'', tipo:'link' , mostrar:paraMostrarLink},
 }
 
 var campos=campos_pendientes;
@@ -262,6 +260,31 @@ function refrescar(){
     },boton);
 }
 
+var ultimaColumnaQueOrdeno='';
+var signo=1;
+
+function ordenarPorColumna(){
+    var columna=this.nombre_campo;
+    if(ultimaColumnaQueOrdeno==columna){
+        signo=-signo;
+    }else{
+        signo=1;
+    }
+    ultimaColumnaQueOrdeno=columna;
+    mensajes.sort(function(a,b){
+        var valora=a[columna];
+        var valorb=b[columna];
+        if(valora==valorb){
+            return 0;
+        }else if(valora<valorb){
+            return signo;
+        }else{
+            return -signo;
+        }
+    });
+    poblar_tabla();
+}
+
 function poblar_tabla(){
     var tabla=document.getElementById('tabla_mensajes');
     tabla.innerHTML='';
@@ -298,6 +321,8 @@ function poblar_tabla(){
         }else{
             td.className='titulo_ordenable';
         }
+        td.nombre_campo=nombre_campo;
+        td.onclick=ordenarPorColumna;
     }
     for(var i=0; i<mensajes.length; i++){
         var fila=tabla.insertRow(-1);
