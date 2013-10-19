@@ -30,10 +30,9 @@ if(getenv('COMPUTERNAME')=='EVAIO'){
 
     function ejecutarSQL($db,$sql,$parametros){
         foreach($parametros as $key => $value){
-            $sql_text = str_replace($key,"'".$value."'",$sql);
+            $sql = str_replace($key,"'".$value."'",$sql);
         }
-        echo $sql_text;
-        $db->setQuery($sql_text);
+        $db->setQuery($sql);
         $db->execute();
         if(substr($sql,0,6)=='SELECT'){
             $resultados = $db->loadObjectList();
