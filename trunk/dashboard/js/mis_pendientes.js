@@ -246,6 +246,7 @@ function enviar(parametros,alterminar,fondo){
 }
 
 function refrescar(){
+    localStorage['taskcontrol-user']=document.getElementById('nombre_usuario').innerText;
     var boton=document.getElementById('boton_refrescar')||document.body;
     boton.style.backgroundColor='';
     enviar({accion:'listar_pendientes',
@@ -317,12 +318,11 @@ function armar_pantalla_inicial(){
     var tabla=document.createElement('table');
     tabla.id='tabla_mensajes';
     div.appendChild(tabla);
-    document.getElementById('nombre_usuario').innerText='... identificando ...';
+    document.getElementById('nombre_usuario').innerText=localStorage['taskcontrol-user']||'SingIn';
     document.getElementById('nombre_usuario').onblur=refrescar;
     agregarleBoton(document.getElementById('seleccionados'),'Sí');
     agregarleBoton(document.getElementById('seleccionados'),'No');
     enviar({accion:'identificar'},function(respuesta){
-        document.getElementById('nombre_usuario').innerText=respuesta.user;
         refrescar();
     });
 }
