@@ -2,6 +2,9 @@
 
 var hoy=new Date();
 
+var token=null;
+var usuario=null;
+
 var idCheck=function(evento){
     this.checked=!this.checked;
     this.src=this.checked?'cuadro-punteado-check.png':'cuadro-punteado.png';
@@ -209,19 +212,37 @@ function enviar(parametros,alterminar,fondo){
     peticion.onreadystatechange=function(){
       switch(peticion.readyState) { 
         case 4:
-            var respuestaJSON = peticion.responseText;
+            var respuestaCruda = peticion.responseText;
             try{
-                var respuesta = JSON.parse(respuestaJSON);
-                alterminar(respuesta);
+                if(parametros.url){
+                    var respuesta={
+                        cruda:respuestaCruda,
+                        status:peticion.status
+                    };
+                    alterminar(JSON.stringify(respuesta));
+                }else{
+                    var respuesta = JSON.parse(respuestaCruda);
+                    alterminar(respuesta);
+                }
             }catch(err){
                 fondo.style.backgroundColor='orange';
-                fondo.title=err+' '+respuestaJSON;
+                fondo.title=err+' '+respuestaCruda;
             }
       }
     }
-    peticion.open('POST','servidor.php',true);
+    peticion.open('POST',parametros.url||'servidor.php',true);
     peticion.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-    peticion.send('todo='+JSON.stringify(parametros));
+    if(parametros.url){
+        var str_par=[];
+        for(var campo in parametros){
+            if(campo!='url'){
+                str_par.push(campo+'='+encodeURIComponent(parametros[campo]));
+            }
+        }
+        peticion.send(str_par.join('&'));
+    }else{
+        peticion.send('todo='+JSON.stringify(parametros));
+    }
 }
 
 function refrescar(){
@@ -300,21 +321,26 @@ function armar_pantalla_inicial(){
     document.getElementById('nombre_usuario').onblur=refrescar;
     agregarleBoton(document.getElementById('seleccionados'),'Sí');
     agregarleBoton(document.getElementById('seleccionados'),'No');
-    agregarleBoton(document.getElementById('boton_login'),loguearse);
+    document.getElementById('boton_login').onclick=loguearse;
     enviar({accion:'identificar'},function(respuesta){
         document.getElementById('nombre_usuario').innerText=respuesta.user;
         refrescar();
     });
+        document.getElementById('user').value='tute.dc.uba.ar@gmail.com';
+        document.getElementById('pass').value='contra22tdua';
 }
 
 function loguearse(){
     enviar({url:'https://www.google.com/accounts/ClientLogin', 
         accountType:'HOSTED_OR_GOOGLE', 
-        Email:document.getElementById('user').innerText,
-        Passwd:document.getElementById('pass').innerText,
+        Email:document.getElementById('user').value,
+        Passwd:document.getElementById('pass').value,
         service:'cl',
-        source:'GrupoApplePie-TaskControl-1000'
-    },function(){
+        source:'GrupoApplePie-TaskControl-V1.00'
+    },function(respuesta){
+        alert('obtuve: '+respuesta);
+        usuario=respuesta.usuario;
+        token=respuesta.token;
         enviar({accion:'identificar', soy:usuario, token:token},function(respuesta){
             document.getElementById('nombre_usuario').innerText=usuario;
             refrescar();
