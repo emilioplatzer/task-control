@@ -1,7 +1,6 @@
 ﻿<?php
 $todo=json_decode(@$_POST['todo']?:'{}');
 $accion=(@$todo->accion)?:'nada';
-$usuario_actual='emilioplatzer@gmail.com';
 
 if(getenv('COMPUTERNAME')=='EVAIO'){
 
@@ -89,6 +88,6 @@ function accion_enviar_respuesta(){
 
 function accion_identificar(){
     global $todo;
-    echo json_encode(array('user'=>'emilioplatzer@gmail.com'));
+    echo "{}";
 }
 ?>
