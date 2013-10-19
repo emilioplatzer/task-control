@@ -185,9 +185,9 @@ var campos_esperados={
 
 var campos_pendientes={
     id:         { titulo:'', tipo:'id', mostrar:paraMostrarId },
-    remitente:  { titulo:'Remitente', mostrar:paraMostrarEmail, colspan:2 },
-    asunto:     { titulo:'Asunto' },
-    vencimiento:{ titulo:'Límite', tipo:'fecha', mostrar:paraMostrarFecha },
+    remitente:  { titulo:'Remitente', mostrar:paraMostrarEmail, colspan:2, linkear:true },
+    asunto:     { titulo:'Asunto', linkear:true },
+    vencimiento:{ titulo:'Límite', tipo:'fecha', mostrar:paraMostrarFecha, linkear:true },
     rapida:     { titulo:'Respuesta Rápida', contentEditable:true},
     respuesta:  { titulo:'', tipo:'respuesta', mostrar:paraMostrarSiNo },
 }
@@ -340,6 +340,12 @@ function poblar_tabla(){
                 td.contentEditable=true;
             }
             (def_campo.mostrar||paraMostrar)(td,mensajes[i][nombre_campo],id);
+            if(def_campo.linkear){
+                td.linkear='https://mail.google.com/mail/u/0/?shva=1#inbox/'+mensajes[i].link
+                td.onclick=function(){
+                    window.open(this.linkear, '_blank');
+                }
+            }
         }
     }
 }
